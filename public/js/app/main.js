@@ -1,5 +1,15 @@
-require:config({
-	paths: {
-		jquery:'../jquery-2.1.4.js'
-	}
-});
+(function(require){
+	"use strict";	
+	
+	require.config({
+		baseUrl: 'js/app',
+		paths: {
+			jquery:'../lib/jquery.js',
+			underscore:'../lib/underscore.js',
+			backbone:'../lib/backbone.js',
+			bootstrap:'../lib/bootstrap.js'
+		}
+	});
+	
+})(require);
+
