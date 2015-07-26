@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>JQuery on hand</title>
+<script src="../js/lib/jquery/jquery.js"></script>
+<script src="../js/lib/underscore/underscore.js"></script>
+<script src="../js/lib/backbone/backbone.js"></script>
+
+<script>
+	$(function() {
+
+		var ListView = Backbone.View.extend({
+				initialize : function() {
+				this.linkList = $(".SubCategoryBox ul>li:gt(2)");
+				this.isFolded = false;
+				this.showBrands();
+			},
+			events : {
+				'click .showmore > a' : 'showBrands',
+				'mouseover .SubCategoryBox li>a': 'popTips',
+				'mouseout .SubCategoryBox li>a':'hideTips',
+				'mousemove .SubCategoryBox li>a':'moveTips'
+			},
+			showBrands : function(e) {
+				if (this.isFolded) {
+					this.linkList.show();
+					$("div.showmore>a").text("click to close it");
+					this.isFolded = false;
+				} else {
+					this.linkList.hide();
+					$("div.showmore>a").text("click to show all");
+					this.isFolded = true;
+				}
+			}
+		});
+		
+		var TipView = Backbone.View.extend({
+		});
+		
+		TipView.prototype.show = function(top, left, msg) {
+			left = left + 20;
+			var $el = $(this.el);
+			$el.text(msg);
+			$el.css({
+				"position":"absolute",
+				"top":top + "px",
+				"left": left + "px"
+			}).show("fast");
+		};
+		
+		TipView.prototype.dispear = function() {
+			var $el = $(this.el);
+			$el.text('');
+			$el.hide();
+		}
+		
+		var tipView = new TipView({el: $(".tipCnt")});
+		
+		
+	  ListView.prototype.popTips = function (e) {
+		  console.log("call me at X:" + e.pageX +", Y:" + e.pageY);
+		  tipView.show(e.pageY, e.pageX, e.target.text);
+	  };
+	  
+	  ListView.prototype.moveTips = function (e) {
+		  tipView.show(e.pageY, e.pageX, e.target.text);
+		};
+	      
+	  ListView.prototype.hideTips = function (e) {
+		  tipView.dispear();
+	  };	
+
+		window.App = new ListView({el : $("body")});
+		  
+	});
+</script>
+</head>
+<body>
+	<div class="SubCategoryBox">
+		<ul>
+			<li><a href="#">Test1</a></li>
+			<li><a href="#">Test2</a></li>
+			<li><a href="#">Test3</a></li>
+			<li><a href="#">Test4</a></li>
+			<li><a href="#">Test5</a></li>
+		</ul>
+		<div class="showmore">
+			<a href="#">show all brands</a>
+		</div>
+	</div>
+	<div class="tipCnt"></div>
+</body>
+</html>
